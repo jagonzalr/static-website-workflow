@@ -62,4 +62,7 @@ gulp.task('img', function() {
 		.pipe(gulp.dest(DIST_PATH + '/images'))
 });
 
-gulp.task('default', ['img', 'scss']);
+gulp.task('clean', function() {
+	return del.sync([DIST_PATH])
+})
+gulp.task('default', ['clean', 'img', 'scss']);

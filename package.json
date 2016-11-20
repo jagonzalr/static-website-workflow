@@ -1,0 +1,38 @@
+{
+  "name": "static-website-workflow",
+  "version": "1.0.0",
+  "description": "Static Website Workflow",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jagonzalr/static-website-workflow.git"
+  },
+  "keywords": [
+    "Gulp"
+  ],
+  "author": "Jose Antonio Gonzalez Rodriguez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jagonzalr/static-website-workflow/issues"
+  },
+  "homepage": "https://github.com/jagonzalr/static-website-workflow#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.18.0",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-imagemin": "^3.1.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^2.2.0",
+    "gulp-uglify": "^2.0.0",
+    "gulp-zip": "^3.2.0",
+    "imagemin-jpeg-recompress": "^5.1.0",
+    "imagemin-pngquant": "^5.0.0"
+  }
+}

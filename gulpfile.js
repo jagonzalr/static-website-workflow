@@ -15,3 +15,9 @@ var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
 var zip = require('gulp-zip')
+
+// Paths
+var DIST_PATH = 'public/dist';
+var IMAGES_PATH = 'public/img/**/*.{png,jpeg,svg,gif}';
+var JS_PATH = 'public/js/**/*.js';
+var SCSS_PATH = 'public/scss/styles.scss';

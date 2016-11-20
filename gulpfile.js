@@ -22,10 +22,18 @@ var zip 										= require('gulp-zip')
 // Paths
 var DIST_PATH 	= 'public/dist';
 var HTML_PATH 	= 'public/**/*.html';
+var HTML_PATH_DIST = 'public/dist/**/*.html';
 var IMAGES_PATH = 'public/img/**/*.{png,jpeg,svg,gif}';
 var JS_PATH 		= 'public/js/**/*.js';
 var SCSS_PATH 	= 'public/scss/styles.scss';
 
+
+// HTML
+gulp.task('html', function() {
+	console.log('Starting HTML task');
+	return gulp.src([HTML_PATH])
+		.pipe(gulp.dest(DIST_PATH));
+});
 
 // SCSS
 gulp.task('scss', function() {
@@ -76,11 +84,22 @@ gulp.task('inject', ['img', 'scss'], function() {
 		.pipe(gulp.dest('public'));
 })
 
-// Other
-gulp.task('clean', del.bind(null, ['dist']));
+gulp.task('inject:dist', ['html', 'img', 'scss'], function() {
+	return gulp.src([HTML_PATH_DIST])
+		.pipe(inject(
+			gulp.src('public/dist/styles.min.css', {read: false}),
+			{ignorePath: 'public/dist', addRootSlash: false}
+		))
+		.pipe(gulp.dest('public/dist'));
+})
 
-gulp.task('serve', ['default'], function(err) {
-	browserSync.init(['public/dist/styles.min.css', 'public/dist/img/*'], {
+// Utilities
+gulp.task('clean', function() {
+	return del.sync([DIST_PATH])
+});
+
+gulp.task('serve', ['clean', 'inject'], function(err) {
+	browserSync.init({
     server: {
         baseDir: "./public/"
     }
@@ -90,6 +109,14 @@ gulp.task('serve', ['default'], function(err) {
   gulp.watch("public/**/*.html").on('change', browserSync.reload);
 });
 
+gulp.task('serve:dist', ['default'], function(err) {
+	browserSync.init({
+    server: {
+        baseDir: "./public/dist"
+    }
+	});
+});
+
 // Default
-gulp.task('default', ['clean', 'inject']);
+gulp.task('default', ['clean', 'inject:dist']);
 

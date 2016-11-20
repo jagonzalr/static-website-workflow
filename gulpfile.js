@@ -45,4 +45,21 @@ gulp.task('scss', function() {
 		.pipe(gulp.dest(DIST_PATH))
 });
 
-gulp.task('default', ['scss']);
+// Images
+gulp.task('img', function() {
+	console.log('Starting IMG task');
+	return gulp.src(IMAGES_PATH)
+		.pipe(imagemin(
+			[
+				imagemin.gifsicle(),
+				imagemin.jpegtran(),
+				imagemin.optipng(),
+				imagemin.svgo(),
+				imageminPngQuant(),
+				imageminJpegRecompress()
+			]
+		))
+		.pipe(gulp.dest(DIST_PATH + '/images'))
+});
+
+gulp.task('default', ['img', 'scss']);

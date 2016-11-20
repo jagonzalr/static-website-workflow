@@ -52,6 +52,7 @@ gulp.task('scss', function() {
 		}))
 		.pipe(sourcemaps.write())
 		.pipe(gulp.dest(DIST_PATH))
+		.pipe(browserSync.stream());
 });
 
 // Images
@@ -83,5 +84,8 @@ gulp.task('serve', ['default'], function(err) {
         baseDir: "./public/dist/"
     }
 	});
+
+	gulp.watch("public/scss/**/*.scss", ['scss']);
+  gulp.watch("public/**/*.html").on('change', browserSync.reload);
 });
 

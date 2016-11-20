@@ -2,36 +2,30 @@
 'use strict';
 
 // Libraries
-var gulp = require('gulp')
-var autoprefixer = require('gulp-autoprefixer');
-var babel = require('gulp-babel');
-var browserSync = require('browser-sync').create();
-var concat = require('gulp-concat');
-var del = require('del');
-var imagemin = require('gulp-imagemin');
+var gulp 										= require('gulp')
+var autoprefixer 						= require('gulp-autoprefixer');
+var babel 									= require('gulp-babel');
+var browserSync 						= require('browser-sync').create();
+var concat 									= require('gulp-concat');
+var del 										= require('del');
+var imagemin 								= require('gulp-imagemin');
 var imageminJpegRecompress 	= require('imagemin-jpeg-recompress');
-var imageminPngQuant = require('imagemin-pngquant');
-var plumber = require('gulp-plumber');
-var rename = require('gulp-rename');
-var sass = require('gulp-sass');
-var sourcemaps = require('gulp-sourcemaps');
-var uglify = require('gulp-uglify');
-var zip = require('gulp-zip')
+var imageminPngQuant 				= require('imagemin-pngquant');
+var inject 									= require('gulp-inject');
+var plumber 								= require('gulp-plumber');
+var rename 									= require('gulp-rename');
+var sass 										= require('gulp-sass');
+var sourcemaps 							= require('gulp-sourcemaps');
+var uglify 									= require('gulp-uglify');
+var zip 										= require('gulp-zip')
 
 // Paths
-var DIST_PATH = 'public/dist';
-var HTML_PATH = 'public/**/*.html';
+var DIST_PATH 	= 'public/dist';
+var HTML_PATH 	= 'public/**/*.html';
 var IMAGES_PATH = 'public/img/**/*.{png,jpeg,svg,gif}';
-var JS_PATH = 'public/js/**/*.js';
-var SCSS_PATH = 'public/scss/styles.scss';
+var JS_PATH 		= 'public/js/**/*.js';
+var SCSS_PATH 	= 'public/scss/styles.scss';
 
-
-// HTML
-gulp.task('html', function() {
-	console.log('Starting HTML task');
-	return gulp.src([HTML_PATH])
-		.pipe(gulp.dest(DIST_PATH));
-});
 
 // SCSS
 gulp.task('scss', function() {
@@ -72,20 +66,30 @@ gulp.task('img', function() {
 		.pipe(gulp.dest(DIST_PATH + '/img'))
 });
 
-gulp.task('clean', function() {
-	return del.sync([DIST_PATH])
-});
+// Inject
+gulp.task('inject', ['img', 'scss'], function() {
+	return gulp.src([HTML_PATH])
+		.pipe(inject(
+			gulp.src('public/dist/styles.min.css', {read: false}),
+			{ignorePath: 'public', addRootSlash: true}
+		))
+		.pipe(gulp.dest('public'));
+})
 
-gulp.task('default', ['clean', 'html', 'img', 'scss']);
+// Other
+gulp.task('clean', del.bind(null, ['dist']));
 
 gulp.task('serve', ['default'], function(err) {
-	browserSync.init({
+	browserSync.init(['public/dist/styles.min.css', 'public/dist/img/*'], {
     server: {
-        baseDir: "./public/dist/"
+        baseDir: "./public/"
     }
 	});
 
 	gulp.watch("public/scss/**/*.scss", ['scss']);
   gulp.watch("public/**/*.html").on('change', browserSync.reload);
 });
+
+// Default
+gulp.task('default', ['clean', 'inject']);
 
